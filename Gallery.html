@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Responsive Carousel - Gallery</title>
+  <link rel="stylesheet" href="Gallery.css">
+
+  <!-- Optional: include Bootstrap icons for arrows (or use text arrows) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Fixed header (replace brand/title as needed) -->
+  <nav class="navbar navbar-dark custom-navbar">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">← Back to Home</a>
+    </div>
+  </nav>
+  <section class="gallery-section py-3 mt-2">
+    <div class="container text-center">
+      <h2 class="fw-bold mb-2 text-gradient">My Gallery</h2>
+      <p class="gradient-text mb-0">A glimpse into moments that define who I am - in life, work, and beyond.</p>
+
+
+  <!-- Carousel wrapper -->
+  <main class="page-main">
+    <section id="carousel" class="carousel" aria-roledescription="carousel">
+      <div class="slides">
+
+        <div class="slide" data-title="Outdoor Reflection" data-desc="Reflecting amidst nature's beauty, surrounded by greenery and rocks.">
+          <!-- TODO: Replace placeholder src with your actual image -->
+          <img class="slide-img" src="./assets/images/1645598989365-01.jpeg" alt="Family">
+        </div>
+
+        <!-- Slide 1 -->
+        <div class="slide active" data-title="Marathon Finish" data-desc="Crossing the finish line of my first marathon - endurance and self-belief.">
+          <!-- TODO: Replace placeholder src with your actual image -->
+          <img class="slide-img" src="assets/images/IMG_20240129_111213_451.jpg" alt="Marathon finish">
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide" data-title="New Bike Day" data-desc="Celebrating the first day with my newly purchased bike, marking a milestone of excitement and pride.">
+          <!-- TODO: Replace placeholder src with your actual image -->
+          <img class="slide-img" src="assets/images/IMG_20230927_192136_874.jpg" alt="Work prototype">
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide" data-title="Travel Moment" data-desc="A serene travel moment - finding peace in exploration and simplicity.">
+          <!-- TODO: Replace placeholder src with your actual image -->
+          <img class="slide-img" src="assets/images/1641468485360-01.jpeg" alt="Travel">
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide" data-title="Graduation Honor " data-desc="Receiving an award at graduation ceremony, marking academic excellence and accomplishment.">
+          <!-- TODO: Replace placeholder src with your actual image -->
+          <img class="slide-img" src="./assets/images/Copy of DSC_3780_1.jpg" alt="Family">
+        </div>
+         <div class="slide" data-title="Beach Relaxation" data-desc="Relaxing on rocks by the beach, enjoying the coastal breeze.">
+          <!-- TODO: Replace placeholder src with your actual image -->
+          <img class="slide-img" src="./assets/images/1631958703398-01.jpeg" alt="Family">
+        </div>
+         <div class="slide" data-title="Friend’s Haldi Ceremony" data-desc="Celebrating the vibrant haldi ritual at my friend’s wedding, filled with colors and joy.">
+          <!-- TODO: Replace placeholder src with your actual image -->
+          <img class="slide-img" src="./assets/images/IMG_20241127_154712.jpg" alt="Family">
+        </div>
+         <div class="slide" data-title="Enjoying Nature" data-desc="Embracing the serenity of nature with a scenic backdrop.">
+          <!-- TODO: Replace placeholder src with your actual image -->
+          <img class="slide-img" src="./assets/images/_MG_1672.jpg" alt="Family">
+        </div>
+         <div class="slide" data-title="Traditional Walk" data-desc="Walking down a street in traditional attire, embracing cultural heritage.">
+          <!-- TODO: Replace placeholder src with your actual image -->
+          <img class="slide-img" src="./assets/images/1626085841870-01.jpeg" alt="Family">
+        </div>
+         <div class="slide" data-title="Wagah Border Visit " data-desc="Experiencing the patriotic atmosphere at the Wagah Border, witnessing the iconic ceremony.">
+          <!-- TODO: Replace placeholder src with your actual image -->
+          <img class="slide-img" src="./assets/images/IMG20240211152008.jpg" alt="Family">
+        </div>
+         
+      </div>
+
+      <!-- Controls -->
+      <button class="ctrl prev" aria-label="Previous slide"><i class="bi bi-chevron-left"></i></button>
+      <button class="ctrl next" aria-label="Next slide"><i class="bi bi-chevron-right"></i></button>
+
+      <!-- Caption area below image -->
+      <div class="caption" aria-live="polite">
+        <h3 class="caption-title"></h3>
+        <p class="caption-desc"></p>
+      </div>
+
+      <!-- Indicators -->
+      <div class="indicators" role="tablist" aria-label="Slide indicators"></div>
+    </section>
+  </main>
+
+<script>
+/* ---------- Responsive carousel JS (no libraries) ---------- */
+
+/* Elements */
+const header = document.querySelector('.site-header');
+const carousel = document.getElementById('carousel');
+const slidesContainer = carousel.querySelector('.slides');
+const slides = Array.from(carousel.querySelectorAll('.slide'));
+const prevBtn = carousel.querySelector('.prev');
+const nextBtn = carousel.querySelector('.next');
+const captionTitle = carousel.querySelector('.caption-title');
+const captionDesc = carousel.querySelector('.caption-desc');
+const indicatorsWrap = carousel.querySelector('.indicators');
+
+let current = 0;
+let autoPlayTimer = null;
+const autoPlayInterval = 6000; // ms, set to 0 to disable autoplay
+
+/* Create indicators dynamically */
+slides.forEach((s, idx) => {
+  const btn = document.createElement('button');
+  btn.className = 'indicator';
+  btn.setAttribute('aria-label', 'Go to slide ' + (idx + 1));
+  btn.dataset.index = idx;
+  btn.addEventListener('click', () => goTo(idx, true));
+  indicatorsWrap.appendChild(btn);
+});
+
+/* Update caption and indicators */
+function updateCaption(index) {
+  const slide = slides[index];
+  captionTitle.textContent = slide.dataset.title || '';
+  captionDesc.textContent = slide.dataset.desc || '';
+  // indicators
+  indicatorsWrap.querySelectorAll('.indicator').forEach((b,i)=>{
+    b.classList.toggle('active', i === index);
+  });
+}
+
+/* Show particular slide */
+function goTo(index, userTriggered = false) {
+  if (index < 0) index = slides.length - 1;
+  if (index >= slides.length) index = 0;
+  slides.forEach((s,i) => s.classList.toggle('active', i === index));
+  current = index;
+  updateCaption(current);
+  if(userTriggered) resetAutoPlay();
+}
+
+/* Prev/Next handlers */
+prevBtn.addEventListener('click', () => goTo(current - 1, true));
+nextBtn.addEventListener('click', () => goTo(current + 1, true));
+
+/* Auto play */
+function startAutoPlay() {
+  if (!autoPlayInterval) return;
+  autoPlayTimer = setInterval(()=> goTo(current + 1), autoPlayInterval);
+}
+function resetAutoPlay() {
+  if (autoPlayTimer) clearInterval(autoPlayTimer);
+  startAutoPlay();
+}
+
+/* Resize logic: ensure carousel height = viewport minus header */
+function updateCarouselHeight() {
+  const navHeight = header ? header.offsetHeight : 0;
+  // small spacing to avoid flush edges
+  const spacing = 20;
+  const height = Math.max(250, window.innerHeight - navHeight - spacing);
+  carousel.style.setProperty('--carousel-height', height + 'px');
+}
+window.addEventListener('resize', updateCarouselHeight);
+window.addEventListener('load', () => {
+  updateCarouselHeight();
+  goTo(0);
+  startAutoPlay();
+});
+
+/* Keyboard accessibility */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') goTo(current - 1, true);
+  if (e.key === 'ArrowRight') goTo(current + 1, true);
+});
+
+/* Pause autoplay on hover/focus */
+carousel.addEventListener('mouseenter', () => { if (autoPlayTimer) clearInterval(autoPlayTimer); });
+carousel.addEventListener('mouseleave', () => resetAutoPlay());
+carousel.addEventListener('focusin', () => { if (autoPlayTimer) clearInterval(autoPlayTimer); });
+carousel.addEventListener('focusout', () => resetAutoPlay());
+</script>
+</body>
+</html>

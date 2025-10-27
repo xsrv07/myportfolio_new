@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Family - Saurav Gupta</title>
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="global.css" />
+  <link rel="stylesheet" href="family.css" />
+</head>
+<body>
+
+  <nav class="navbar navbar-dark custom-navbar">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">← Back to Home</a>
+    </div>
+  </nav>
+
+  <!-- Family Section -->
+  <section class="family-section py-5 mt-5">
+    <div class="container text-center">
+      <h1 class="fw-bold mb-4 text-gradient">My Family</h1>
+      <p class="text-muted mb-5">The people who shaped my values, inspired my discipline, and supported every milestone of my journey.</p>
+
+      <div class="row justify-content-center g-4">
+
+        <!-- Parents -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="family-card shadow-sm">
+            
+            <img src="assets/images/FB_IMG_1686505365023-01.jpeg" alt="Parents" class="family-photo">
+            <div class="card-body">
+              <h4 class="fw-semibold mt-3"><i class="bi bi-heart-fill text-danger me-1"></i>My Parents</h4>
+              <p class="text-muted small">
+                My mother and father are the twin pillars of my life - her kindness and his wisdom continue to guide every decision I make.
+              </p>
+            </div>
+          </div>
+        </div>
+
+         <!-- Mother -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="family-card shadow-sm">
+            <img src="assets/images/mother.png" alt="Brother" class="family-photo">
+            <div class="card-body">
+              <h4 class="fw-semibold mt-3"><i><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#1f1f1f"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M18.39,14.56C16.71,13.7,14.53,13,12,13c-2.53,0-4.71,0.7-6.39,1.56C4.61,15.07,4,16.1,4,17.22V20h16v-2.78 C20,16.1,19.39,15.07,18.39,14.56z"/><path d="M9.78,12h4.44c1.21,0,2.14-1.06,1.98-2.26l-0.32-2.45C15.57,5.39,13.92,4,12,4S8.43,5.39,8.12,7.29L7.8,9.74 C7.64,10.94,8.57,12,9.78,12z"/></g></g></svg></i>My Mother</h4>
+              <p class="text-muted small">
+                My mother is the calm strength and nurturing spirit of our home.  
+          She taught me compassion, humility, and the importance of patience in every pursuit of life.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        
+
+        <!-- Brother -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="family-card shadow-sm">
+            
+            <img src="assets/images/b1.png" alt="Brother" class="family-photo">
+            <div class="card-body">
+              <h4 class="fw-semibold mt-3"><i class="bi bi-person-fill text-primary me-1"></i>My Brother</h4>
+              <p class="text-muted small">
+                Musician,Energetic and ambitious - my brother brings balance, humor, and a sense of teamwork into our family’s rhythm.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Maternal Grandmother -->
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="family-card shadow-sm">
+            
+            <img src="assets/images/20211127202753_IMG_2400-01.jpeg" alt="Maternal Grandmother" class="family-photo">
+            <div class="card-body">
+              <h4 class="fw-semibold mt-3"><i class="bi bi-flower3 text-success me-1"></i>My Maternal Grandmother</h4>
+              <p class="text-muted small">
+                The heart of our home - her patience, devotion, and stories are reminders of simplicity and grace that keep our roots strong.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- JS to load navbar -->
+  <script>
+    fetch("navbar.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("navbar-placeholder").innerHTML = data;
+      })
+      .catch(error => console.error("Navbar load error:", error));
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

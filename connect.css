@@ -1,0 +1,12 @@
+body {
+  background: linear-gradient(120deg, #f8f9fa, #e8f0f2);
+}
+
+.custom-navbar {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+}
+
+.gallery-section {
+  margin-top: 80px;
+  padding: 60px 20px;
+}

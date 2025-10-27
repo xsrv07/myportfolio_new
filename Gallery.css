@@ -1,0 +1,154 @@
+/* ---------- Basic page reset ---------- */
+* { box-sizing: border-box; }
+html,body { height:100%; margin:0; font-family: Inter, system-ui, Arial, sans-serif; color:#222; }
+
+/* ---------- Header (fixed) ---------- */
+.site-header {
+ 
+  background: linear-gradient(90deg,#007bff,#6610f2);
+  padding:18px 20px;
+ 
+}
+.custom-navbar {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  padding:18px 20px;
+}
+
+
+.brand { font-weight:700; font-size:1.15rem; color:#fff; text-decoration:none; }
+/*.navlinks a { color:rgba(255,255,255,0.95); text-decoration:none; margin-left:16px; font-weight:600; }*/
+.navlinks a:hover { opacity:0.95; transform:translateY(-1px); }
+
+/* Make sure body content sits below fixed header */
+.page-main { padding-top: calc(var(--header-padding, 0)); }
+
+/* ---------- Carousel container ---------- */
+.carousel {
+  --carousel-height: calc(100vh - 80px);
+  max-width:1200px;
+  margin: 28px auto;
+  padding: 8px;
+  position: relative;
+}
+
+/* slides container fills computed height and centers image */
+.slides {
+  position: relative;
+  height: var(--carousel-height);
+  overflow: hidden;
+  border-radius: 14px;
+  background: linear-gradient(180deg,Purple, cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* each slide is positioned absolutely and shown/hidden by .active */
+.slide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+}
+
+.slide.active {
+  display:flex;
+}
+
+/* Image styling: keep whole image visible (no cropping) and responsive */
+.slide-img {
+  max-height: 100%;
+  width: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(16,24,40,0.08);
+  background: #000; /* helps letterbox contrast */
+}
+
+/* Controls (prev/next) */
+.ctrl {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background: rgba(0,0,0,0.45);
+  color:#fff;
+  border:0;
+  width:48px;
+  height:48px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:10;
+  transition:background 0.18s ease, transform 0.12s ease;
+}
+.ctrl:hover { background: rgba(0,0,0,0.65); transform:translateY(-50%) scale(1.03); }
+.prev { left:18px; }
+.next { right:18px; }
+.ctrl .bi { font-size:1.25rem; }
+
+/* Caption area below the image, centered */
+.caption {
+  margin-top: 12px;
+  text-align:center;
+  color:#111;
+  max-width:900px;
+  margin-left:auto;
+  margin-right:auto;
+  padding:12px 18px;
+}
+.caption-title {
+  margin:0;
+  font-size:1.25rem;
+  font-weight:700;
+  color:#0b3bff;
+}
+.caption-desc {
+  margin:6px 0 0 0;
+  color:#444;
+  font-size:0.98rem;
+}
+
+/* Indicators */
+.indicators {
+  position: absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom: 10px;
+  display:flex;
+  gap:8px;
+  z-index:10;
+}
+.indicator {
+  width:10px; height:10px; border-radius:50%; background:black; border:0; cursor:pointer;
+}
+.indicator.active { background:#6610f2; box-shadow:0 4px 10px rgba(102,16,242,0.22); }
+
+/* Responsive tweaks */
+@media (max-width:1000px) {
+  .carousel { margin:18px; }
+  .ctrl { width:44px; height:44px; }
+  .caption-title { font-size:1.05rem; }
+}
+
+@media (max-width:600px) {
+  .slides { border-radius:10px; }
+  .ctrl { width:40px; height:40px; }
+  .caption { padding:10px; }
+  .caption-title { font-size:1rem; }
+  .caption-desc { font-size:0.92rem; }
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #6610f2, #007bff); /* Purple to Blue */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700; /* Bold */
+  font-size: 1.5rem; /* Increase size (adjust as needed) */
+}
+
+
+

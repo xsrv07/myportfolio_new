@@ -1,0 +1,27 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(120deg, #f8f9fa, #e8f0f2);
+}
+
+/* Navbar */
+.custom-navbar {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Link Cards */
+.link-card .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px;
+}
+
+.link-card:hover .card {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}

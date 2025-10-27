@@ -1,0 +1,40 @@
+body {
+  background: linear-gradient(120deg, #f8f9fa, #e8f0f2);
+}
+
+h1 span.text-primary {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+img.rounded.shadow {
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+.custom-navbar {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+  color: #fff !important;
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+}
+
+.navbar-nav .nav-link {
+  color: #f8f9fa !important;
+  font-weight: 500;
+  margin-right: 15px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ffd966 !important;
+  transform: scale(1.05);
+}
+
+.navbar-nav .nav-link.active {
+  color: #ffe082 !important;
+}

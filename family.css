@@ -1,0 +1,45 @@
+.family-section {
+  background: linear-gradient(135deg, #ffffff, #f7f2ff);
+  border-radius: 25px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  padding: 60px 0;
+}
+
+.family-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.family-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 14px 30px rgba(102, 16, 242, 0.1);
+}
+
+.family-photo {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-bottom: 4px solid #6610f2;
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .family-photo {
+    height: 250px;
+  }
+  .family-section {
+    padding: 40px 0;
+  }
+}
+
+.custom-navbar {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+}
