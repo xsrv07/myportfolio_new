@@ -32,18 +32,18 @@
       </div>
 
 
-      <form class="contact-form mx-auto" style="max-width:500px;" action="https://formspree.io/f/xvgvzrne" method="POST">
-        <div class="mb-3">
-          <input type="text" class="form-control" placeholder="Your Name" required>
-        </div>
-        <div class="mb-3">
-          <input type="email" class="form-control" placeholder="Your Email" required>
-        </div>
-        <div class="mb-3">
-          <textarea class="form-control" rows="4" placeholder="Your Message" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary px-4">Send Message</button>
-      </form>
+     <form action="https://formspree.io/f/xvgvzrne" method="POST" class="contact-form mx-auto" style="max-width:500px;">
+  <div class="mb-3">
+    <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+  </div>
+  <div class="mb-3">
+    <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+  </div>
+  <div class="mb-3">
+    <textarea name="message" class="form-control" rows="4" placeholder="Your Message" required></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary px-4">Send Message</button>
+</form>
     </div>
   </section>
 </body>
