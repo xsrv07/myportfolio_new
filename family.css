@@ -1,3 +1,4 @@
+
 .family-section {
   background: linear-gradient(135deg, #ffffff, #f7f2ff);
   border-radius: 25px;
@@ -47,4 +48,42 @@
 }
 .custom-navbar {
   background: linear-gradient(90deg, #007bff, #6610f2);
+}
+
+body{
+  /* warm cream + soft gold tones */
+  --bg1:#f7efe6;   /* cream */
+  --bg2:#fff8ee;   /* lighter cream */
+  --gold:#c49a6c;  /* muted gold */
+
+  background-attachment: fixed;
+  /* light textile/jaali-like texture + warm gradient */
+  background-image:
+    radial-gradient(circle at 25px 25px, rgba(196,154,108,.12) 2px, transparent 2px),
+    radial-gradient(circle at 0 0,       rgba(196,154,108,.08) 1px, transparent 1px),
+    linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+  background-size: 50px 50px, 25px 25px, 100% 100%;
+  background-color: var(--bg2);
+}
+
+/* keep cards crisp on the new background */
+.family-card{
+  background:#fff;
+  border:1px solid rgba(196,154,108,.18);   /* faint gold edge */
+  border-radius:16px;
+}
+
+/* subtle decorative rule under the main title */
+.family-section h1{
+  position: relative;
+}
+.family-section h1::after{
+  content:"";
+  display:block;
+  height:3px;
+  width:140px;
+  margin:10px auto 0;
+  background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  border-radius:2px;
+  opacity:.85;
 }
