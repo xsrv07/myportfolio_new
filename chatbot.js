@@ -1,4 +1,6 @@
-document.addEventListener("DOMContentLoaded", async () => {
+// chatbot.js — Pure AI (Cloudflare Worker backend)
+
+document.addEventListener("DOMContentLoaded", () => {
   const bubble = document.getElementById("chatbot-launcher");
   const windowBox = document.getElementById("chatbot-window");
   const closeBtn = document.getElementById("chatbot-close");
@@ -7,20 +9,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const sendBtn = document.getElementById("chatbot-send");
   const typingIndicator = document.getElementById("chatbot-typing");
 
-  let greeted = false;
-  let KB = null; // knowledge base JSON
+  // 🔗 Replace with your Worker URL (must end with /chatbot)
+  const FUNCTION_URL = "https://tiny-firefly-a524.ysmrsink.workers.dev/";
 
-  // Load JSON knowledge file
-  async function loadKnowledgeBase() {
-    try {
-      const res = await fetch("saurav_knowledge_base.json");
-      KB = await res.json();
-      console.log("Knowledge base loaded ✅");
-    } catch (err) {
-      console.error("KB Load Error ❌", err);
-    }
-  }
-  loadKnowledgeBase();
+  let greeted = false;
+  let sending = false;
 
   function addMessage(text, sender = "bot") {
     const div = document.createElement("div");
@@ -30,6 +23,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     msgBox.scrollTop = msgBox.scrollHeight;
   }
 
+  function setTyping(isOn) {
+    typingIndicator.style.display = isOn ? "block" : "none";
+  }
+
+  function setInputEnabled(enabled) {
+    inputBox.disabled = !enabled;
+    sendBtn.disabled = !enabled;
+  }
+
+  // Open/close
   if (bubble && windowBox) {
     bubble.addEventListener("click", () => {
       windowBox.classList.toggle("chatbot-hidden");
@@ -37,6 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         setTimeout(() => addMessage("Hello, I’m Mr. X. How may I assist you today?"), 400);
         greeted = true;
       }
+      inputBox?.focus();
     });
   }
 
@@ -48,13 +52,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  // Send handlers
   if (sendBtn && inputBox) {
     const sendUserMessage = () => {
       const text = inputBox.value.trim();
-      if (!text) return;
+      if (!text || sending) return;
       addMessage(text, "user");
       inputBox.value = "";
-      respondFromKnowledge(text);
+      callBackend(text);
     };
 
     sendBtn.addEventListener("click", sendUserMessage);
@@ -66,98 +71,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // ✅ Offline local answer (temporary)
-  async function respondFromKnowledge(userMsg) {
-    typingIndicator.style.display = "block";
-    await new Promise(r => setTimeout(r, 500)); // fake thinking delay
-    typingIndicator.style.display = "none";
+  // 🔥 Pure AI: everything goes to backend
+  async function callBackend(userMsg) {
+    sending = true;
+    setTyping(true);
+    setInputEnabled(false);
 
-    if (!KB) {
-      addMessage("Knowledge base not loaded yet. Please try again.");
-      return;
+    try {
+      const res = await fetch(FUNCTION_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMsg })
+      });
+
+      // Network OK but backend error?
+      if (!res.ok) {
+        const detail = await res.text().catch(() => "");
+        addMessage("Sorry, there was a problem on the server. Please try again.");
+        console.error("Backend HTTP error:", res.status, detail);
+      } else {
+        const data = await res.json();
+        addMessage(data.reply || "Sorry, I couldn’t generate a response.");
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      addMessage("Sorry, there was a problem connecting to the server.");
+    } finally {
+      setTyping(false);
+      setInputEnabled(true);
+      sending = false;
+      inputBox?.focus();
     }
-
-    const msg = userMsg.toLowerCase();
-
-    const greetings = ["hi", "hello", "hey", "hii", "hiii", "hola", "namaste", "good morning", "good evening", "good afternoon"];
-
-    if (greetings.some(g => msg.startsWith(g))) {
-    addMessage("Hello! I’m Mr. X. I can assist with details about Saurav’s education, work experience, skills, interests, values, awards, family, or marriage profile. How may I help you?");
-    return;
-        }
-
-    if (
-        msg.includes("about saurav") ||
-        msg.includes("who is saurav") ||
-        msg.includes("tell me about saurav") ||
-        msg.includes("introduce saurav") ||
-        msg.includes("what is saurav") ||
-        msg.includes("yourself")
-        ) {
-        addMessage(
-            "Saurav is a Firmware and Industrial IoT Engineer with an Executive MBA from IIM Amritsar. He holds a B.E. in Instrumentation & Electronics from Jadavpur University. Professionally, he has worked with Reliance Industries and Cognizant (for Schneider Electric) as a Product and Firmware Test Specialist. He’s analytical, calm, and disciplined — passionate about technology, strategy, and personal growth. He values humility, balance, and long-term purposeful living."
-        );
-        return;
-        }
-
-    if (msg.includes("education") || msg.includes("study")) {
-      const edu = KB.education.map(e => `${e.level}: ${e.institution}`).join("; ");
-      addMessage(`Education: ${edu}`);
-      return;
-    }
-
-    if (msg.includes("experience") || msg.includes("work") || msg.includes("career")) {
-      addMessage(`Work experience includes roles at Cognizant (Schneider Electric), Reliance Industries, and IIoT product projects.`);
-      return;
-    }
-
-    if (msg.includes("skills")) {
-      addMessage(`Skills include firmware, embedded systems, MQTT, OPC UA, MODBUS, HART, Power BI, Tableau, and product strategy.`);
-      return;
-    }
-
-    if (msg.includes("awards") || msg.includes("achievements")) {
-      addMessage(`Awards: NSO/IMO Rank 1, 4× R-Samaan (Reliance), Manipal Scholarship (₹30k, 3rd rank).`);
-      return;
-    }
-
-    if (msg.includes("interests") || msg.includes("hobbies")) {
-      addMessage(`Interests include running, photography, sketching, reading, cricket, badminton, chess, pool, and volunteering.`);
-      return;
-    }
-
-    if (msg.includes("values")) {
-      addMessage(`Core values: humility, discipline, compassion, truthfulness, self-control, equanimity, service mindset.`);
-      return;
-    }
-
-    if (msg.includes("family")) {
-      addMessage(`Family: parents with strong values, brother, and maternal grandmother — close-knit & respectful environment.`);
-      return;
-    }
-
-    if (
-  msg.includes("marriage") ||
-  msg.includes("marital") ||
-  msg.includes("bachelor") ||
-  msg.includes("single") ||
-  msg.includes("status")
-) {
-  addMessage('Marital status: Bachelor.\n Marriage intent: Long-term partnership based on shared values, intellectual compatibility, mutual respect, and disciplined peaceful lifestyle.');
-  return;
-}
-
-    if (msg.includes("diet") || msg.includes("food") || msg.includes("eat")) {
-      addMessage(`Diet: eggetarian, consumes dairy, prefers green tea, boiled eggs, paneer, controlled carbs.`);
-      return;
-    }
-
-    if (msg.includes("location") || msg.includes("relocate")) {
-      addMessage(`Currently based in Hyderabad; open to Pune and Gurgaon.`);
-      return;
-    }
-
-    // default fallback
-    addMessage("I can answer about education, work experience, skills, values, awards, interests, family, or marriage details. Please ask specifically.");
   }
 });
