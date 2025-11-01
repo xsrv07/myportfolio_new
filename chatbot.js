@@ -1,5 +1,17 @@
 // chatbot.js — Pure AI (Cloudflare Worker backend)
 
+// create a stable per-browser session id and store it
+function getSessionId() {
+  const key = "mr_x_session_id";
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = "sess_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem(key, id);
+  }
+  return id;
+}
+const SESSION_ID = getSessionId();
+
 document.addEventListener("DOMContentLoaded", () => {
   const bubble = document.getElementById("chatbot-launcher");
   const windowBox = document.getElementById("chatbot-window");
@@ -10,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const typingIndicator = document.getElementById("chatbot-typing");
 
   // 🔗 Replace with your Worker URL (must end with /chatbot)
-  const FUNCTION_URL = "https://tiny-firefly-a524.ysmrsink.workers.dev/chatbot";
+  const FUNCTION_URL = "https://tiny-firefly-a524.ysmrsink.workers.dev/";
 
   let greeted = false;
   let sending = false;
@@ -81,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch(FUNCTION_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMsg })
+        body: JSON.stringify({ message: userMsg, sessionId: SESSION_ID })
       });
 
       // Network OK but backend error?
@@ -103,5 +115,4 @@ document.addEventListener("DOMContentLoaded", () => {
       inputBox?.focus();
     }
   }
-
 });
