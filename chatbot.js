@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const typingIndicator = document.getElementById("chatbot-typing");
 
   // 🔗 Replace with your Worker URL (must end with /chatbot)
-  const FUNCTION_URL = "https://tiny-firefly-a524.ysmrsink.workers.dev/";
+  const FUNCTION_URL = "https://tiny-firefly-a524.ysmrsink.workers.dev/chatbot";
 
   let greeted = false;
   let sending = false;
@@ -103,4 +103,5 @@ document.addEventListener("DOMContentLoaded", () => {
       inputBox?.focus();
     }
   }
+
 });
