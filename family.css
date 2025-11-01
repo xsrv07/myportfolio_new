@@ -17,12 +17,20 @@
   box-shadow: 0 14px 30px rgba(102, 16, 242, 0.1);
 }
 
-.family-photo {
+
+.card-img-top {
   width: 100%;
-  height: 320px;
-  object-fit: cover;
-  border-bottom: 4px solid #6610f2;
+  display: block;
+  border-top-left-radius: .75rem;
+  border-top-right-radius: .75rem;
 }
+
+.card-img-top.portrait {
+  aspect-ratio: 4 / 5;     /* tall portrait box */
+  object-fit: cover;       /* fills the box */
+  object-position: 50% 10%;/* keep more of the top (face) visible */
+}
+
 
 .text-gradient {
   background: linear-gradient(90deg, #007bff, #6610f2);
@@ -30,16 +38,13 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .family-photo {
-    height: 250px;
-  }
-  .family-section {
-    padding: 40px 0;
+
+
+@media (max-width: 576px) {
+  .card-img-top.portrait {
+    object-position: 50% 0%; /* show even more of the top on mobile */
   }
 }
-
 .custom-navbar {
   background: linear-gradient(90deg, #007bff, #6610f2);
 }
