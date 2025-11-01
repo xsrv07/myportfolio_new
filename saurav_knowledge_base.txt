@@ -1,0 +1,130 @@
+------------------------------------------------------------
+SECTION 1 — PROFILE SUMMARY
+------------------------------------------------------------
+Name: Saurav
+Profession: Firmware / Industrial IoT Engineer and MBA graduate
+Primary Identity: Technically strong, analytical thinker with a balanced interest in engineering, strategy, data, and personal values.
+Purpose of Website: Professional + marriage profile presentation + personal portfolio
+
+------------------------------------------------------------
+SECTION 2 — EDUCATION TIMELINE
+------------------------------------------------------------
+10th Standard: BNS DAV Public School, Bokaro Steel City
+12th Standard: Chinmaya Vidyalaya, Bokaro Steel City
+Bachelor of Engineering: Jadavpur University
+  - Branch: Instrumentation & Electronics Engineering
+  - Key subjects: Control Systems, Process Instrumentation, Analog Electronics, Digital Electronics, Embedded Systems, C/C++ Programming
+Executive MBA: IIM Amritsar
+  - Key subjects: Strategic Leadership, Advanced Marketing Management, Operations Management, Financial Management, Data Analytics, Consumer Behaviour, Digital Transformation, Operations Research
+
+------------------------------------------------------------
+SECTION 3 — PROFESSIONAL JOURNEY
+------------------------------------------------------------
+1. Reliance Industries (RIL)
+   - Role: Project Manager / Reliability Engineer / Digital Transformation Contributor
+   - Key contributions: Industrial automation, asset reliability, large-scale digital initiatives
+   - Awards: 4× R-Samaan Award for Engineering Excellence
+
+2. Cognizant (Client: Schneider Electric)
+   - Role: Product Manager / Firmware Test SME / IIoT Specialist
+   - Work includes: Smart Edge Devices (SED), APL-enabled transmitters, MQTT, OPC UA, Analog I/O testing, 4–20mA calibration, embedded testing
+
+3. Additional Projects
+   - Vortex flowmeter product development
+   - Machine learning model to predict circumscribed radius of polygon
+   - Industrial instrumentation: SRD998, IMV25, wireless IAN device
+   - Working on pressure transmitter capable of MQTT, OPC UA, MODBUS, HART + Web UI
+
+------------------------------------------------------------
+SECTION 4 — SKILLS & DOMAIN EXPERTISE
+------------------------------------------------------------
+- Firmware & Embedded Systems
+- Industrial Instrumentation (sensors, 4–20mA, HART, APL)
+- IIoT Protocols: MQTT (Sparkplug), OPC UA, MODBUS, HART
+- Product Testing & Calibration
+- Data Analytics (Power BI, Tableau, Python basics)
+- Strategic Product Thinking (MBA + engineering background)
+- Digital Transformation & Reliability Engineering
+- Basics of Machine Learning & Mathematical Modelling
+
+------------------------------------------------------------
+SECTION 5 — AWARDS & RECOGNITION
+------------------------------------------------------------
+- NSO / IMO Rank 1 in City
+- 4× R-Samaan Award from Reliance Industries
+- 3rd Rank + ₹30,000 scholarship in competition by Manipal University
+- Marathon runner (long-distance discipline)
+
+------------------------------------------------------------
+SECTION 6 — PERSONAL VALUES (derived from Gita Ch.13:8–12, modern interpretation)
+------------------------------------------------------------
+- Humility over arrogance
+- Discipline in thought and habit
+- Respectful tone and non-violence in action
+- Equanimity in success or loss
+- Service mindset (donations, volunteering, helping)
+- Detachment from material obsession, focus on inner clarity
+- Truthfulness without aggression
+- Compassion with practicality
+- Self-control in consumption and desires
+- Continuous learning mindset
+
+------------------------------------------------------------
+SECTION 7 — INTERESTS & HOBBIES
+------------------------------------------------------------
+- Running (marathoner)
+- Photography (observational + nature)
+- Sketching (visual creativity & mindfulness)
+- Reading books (non-fiction, psychology, strategy, spirituality)
+- Playing: Cricket, Badminton, Chess, Pool
+- Donations & volunteering work
+- Exploring how data, logic, and spirituality connect
+
+------------------------------------------------------------
+SECTION 8 — FAMILY SUMMARY
+------------------------------------------------------------
+- Parents: Supportive, value-driven family rooted in ethics and education
+- Brother: Part of close-knit family
+- Maternal Grandmother: Respected elder presence
+- Family nature: Simple, grounded, peaceful, respects relationships
+
+------------------------------------------------------------
+SECTION 9 — LIFESTYLE & PERSONAL DETAILS (Marriage relevant)
+------------------------------------------------------------
+Diet: Eggetarian; consumes dairy; prefers boiled eggs, paneer, controlled carbs
+Drinks: Only green tea (no habit of tea/coffee/alcohol/smoking)
+Fitness: Actively into running, weight training, disciplined routine
+Location: Based in Hyderabad; open to relocate to Pune / Gurgaon
+CTC / Work: Experienced professional with stable career trajectory
+Personality style: Calm, analytical, emotionally stable, respectful, introvert-leaning but clear in communication
+Marriage intention: Long-term partnership built on shared values, intellect, emotional respect, disciplined lifestyle
+
+------------------------------------------------------------
+SECTION 10 — BLOG THEMES (for chatbot reference)
+------------------------------------------------------------
+- Data thinking + philosophy
+- Reliability engineering
+- Psychology of decision making
+- Product management insights
+- Occasionally spiritual reflections with rational framing
+
+------------------------------------------------------------
+SECTION 11 — FUTURE GOALS
+------------------------------------------------------------
+- Build strong career in Industrial IoT + Product leadership
+- Continue learning in analytics, ML, reliability engineering
+- Publish book “Cost of Thought” (mind as a factory model)
+- Create meaningful balance between engineering, spirituality, health, and family
+- Build peaceful, values-aligned married life with mutual growth
+- Long-term interest in creating tech products with purpose, not hype
+
+------------------------------------------------------------
+SECTION 12 — CHATBOT RESPONSE RULES
+------------------------------------------------------------
+- Tone: Always professional, polite, concise
+- Do not fabricate unknown facts
+- If information is missing, respond: “I do not have that information, but I can assist with something else.”
+- No emojis unless explicitly requested
+- No jokes unless invited
+- Stay aligned to Saurav’s values and professional nature
+------------------------------------------------------------

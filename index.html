@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./Chatbot.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
@@ -38,7 +39,7 @@
       <i class="bi bi-images me-1"></i> Gallery
     </a>
   </li>
- <li class="nav-item">
+  <li class="nav-item">
     <a class="nav-link" href="blog.html">
       <i class="bi bi-journal-text me-1"></i> My Blogs
     </a>
@@ -67,6 +68,7 @@
       </p>
       <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a href="https://www.instagram.com/ys_saurav007?igsh=MTIzcTFnd253ZDc1Yw%3D%3D&utm_source=qr"><img src="assets/images/instagram-svgrepo-com.svg" alt="LinkedIn" width="40" height="40"></a>
+        <p> </p>
         <a href="https://www.linkedin.com/in/saurav-gupta-b43b68146/"><img src="assets/images/linkedin-svgrepo-com.svg" alt="LinkedIn" width="40" height="40"></a>
       </div>
       <div class="mt-4">
@@ -77,6 +79,67 @@
     </div>
   </div>
 </div>
+<!-- Floating Chatbot UI -->
+<div id="chatbot-launcher">
+  <i class="bi bi-chat-dots-fill"></i>
+</div>
+
+<div id="chatbot-window" class="chatbot-hidden">
+  <div class="chatbot-header">
+    <span class="bot-name">Mr. X</span>
+    <button id="chatbot-close">×</button>
+  </div>
+  <div id="chatbot-messages"></div>
+  <div id="chatbot-typing" class="typing-indicator">Mr. X is typing...</div>
+  <div class="chatbot-input-box">
+    <textarea id="chatbot-input" placeholder="Type your message..."></textarea>
+    <button id="chatbot-send">Send</button>
+  </div>
+</div>
+
+<!-- Chatbot JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<script>
+  // Simple blog preview loader (reads from blogPosts array)
+  const blogPosts = [
+    {
+      title: "Engineering Calm: Lessons from Control Systems",
+      date: "October 20, 2025",
+      excerpt: "How feedback loops in control systems mirror self-regulation in life and leadership.",
+      link: "blog.html#control-systems"
+    },
+    {
+      title: "When Devices Speak — The Magic of IIoT Protocols",
+      date: "October 15, 2025",
+      excerpt: "From Modbus to MQTT — how machines communicate efficiently and why it fascinates me.",
+      link: "blog.html#iiot-protocols"
+    }
+  ];
+
+  const latestContainer = document.getElementById("latestBlogs");
+  latestContainer.innerHTML = blogPosts
+    .slice(0, 3)
+    .map(
+      (post) => `
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="blog-card">
+          <h5 class="fw-bold">${post.title}</h5>
+          <small class="text-muted d-block mb-2">${post.date}</small>
+          <p class="text-muted">${post.excerpt}</p>
+          <a href="${post.link}" class="read-more">Read More →</a>
+        </div>
+      </div>`
+    )
+    .join("");
+    document.getElementById("chatbot-launcher").addEventListener("click", () => {
+  document.getElementById("chatbot-window").classList.remove("chatbot-hidden");
+});
+
+// Close chatbot
+document.getElementById("chatbot-close").addEventListener("click", () => {
+  document.getElementById("chatbot-window").classList.add("chatbot-hidden");
+});
+</script>
+<script src="chatbot.js"></script>
 </body>
 </html>

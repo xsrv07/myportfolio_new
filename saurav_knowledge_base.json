@@ -1,0 +1,204 @@
+{
+  "profile": {
+    "name_preferred": "Saurav",
+    "purpose": [
+      "professional_portfolio",
+      "marriage_profile"
+    ],
+    "summary": "Firmware/Industrial IoT engineer with Executive MBA; analytical, values-driven, and disciplined."
+  },
+  "education": [
+    {
+      "level": "10th Standard",
+      "institution": "BNS DAV Public School",
+      "city": "Bokaro Steel City",
+      "board": "CBSE"
+    },
+    {
+      "level": "12th Standard",
+      "institution": "Chinmaya Vidyalaya",
+      "city": "Bokaro Steel City",
+      "board": "CBSE"
+    },
+    {
+      "level": "B.E.",
+      "degree": "Instrumentation & Electronics Engineering",
+      "institution": "Jadavpur University",
+      "key_subjects": [
+        "Control Systems",
+        "Process Instrumentation",
+        "Analog Electronics",
+        "Digital Electronics",
+        "Embedded Systems",
+        "C/C++ Programming"
+      ]
+    },
+    {
+      "level": "Executive MBA",
+      "institution": "IIM Amritsar",
+      "key_subjects": [
+        "Strategic Leadership",
+        "Advanced Marketing Management",
+        "Operations Management",
+        "Financial Management",
+        "Data Analytics",
+        "Consumer Behaviour",
+        "Digital Transformation",
+        "Operations Research"
+      ]
+    }
+  ],
+  "professional_experience": [
+    {
+      "company": "Cognizant (Client: Schneider Electric)",
+      "roles": [
+        "Firmware Test Engineer",
+        "SME",
+        "Product/IIoT Specialist"
+      ],
+      "period": "2023—Present",
+      "highlights": [
+        "Smart Edge Devices (SED) verification and analog I/O (4–20 mA) calibration",
+        "Diagnostics, acceptance criteria, reliability validation",
+        "MQTT Sparkplug, OPC UA integrations; test automation pipelines"
+      ]
+    },
+    {
+      "company": "Reliance Industries (RIL)",
+      "roles": [
+        "Engineer",
+        "Project/Reliability roles"
+      ],
+      "period": "2016—2019",
+      "highlights": [
+        "Industrial automation, reliability programs, operational improvements",
+        "Recognized multiple times with R‑Samaan awards"
+      ]
+    },
+    {
+      "company": "Various / Projects",
+      "roles": [
+        "Product/Project"
+      ],
+      "period": "2019—2023",
+      "highlights": [
+        "Vortex flowmeter R&D",
+        "Work on SRD998, IMV25, IAN (wireless) devices",
+        "Pressure transmitter concept with MQTT, OPC UA, MODBUS, HART + Web UI",
+        "Independent ML experiment: circumscribed radius prediction"
+      ]
+    }
+  ],
+  "skills": {
+    "firmware_embedded": [
+      "Embedded C/C++",
+      "Diagnostics",
+      "Calibration Systems"
+    ],
+    "iiot_protocols": [
+      "MQTT (Sparkplug)",
+      "OPC UA",
+      "MODBUS",
+      "HART"
+    ],
+    "instrumentation": [
+      "Sensors",
+      "Analog I/O",
+      "4–20 mA",
+      "APL basics"
+    ],
+    "data_tools": [
+      "Power BI",
+      "Tableau"
+    ],
+    "product_strategy": [
+      "Reliability Engineering",
+      "Test Automation",
+      "Digital Transformation"
+    ]
+  },
+  "awards_achievements": [
+    {
+      "title": "NSO/IMO City Rank 1"
+    },
+    {
+      "title": "R‑Samaan Award (Reliance Industries)",
+      "count": 4
+    },
+    {
+      "title": "Manipal University Competition",
+      "result": "3rd Rank",
+      "scholarship_inr": 30000
+    },
+    {
+      "title": "Marathoner",
+      "notes": "Long-distance running discipline"
+    }
+  ],
+  "interests_hobbies": [
+    "Running",
+    "Photography",
+    "Sketching",
+    "Reading (non-fiction, psychology, strategy, spirituality)",
+    "Cricket",
+    "Badminton",
+    "Chess",
+    "Pool",
+    "Donations & Volunteering"
+  ],
+  "values": [
+    "Humility",
+    "Non-violence (gentle conduct)",
+    "Forgiveness",
+    "Truthfulness",
+    "Compassion",
+    "Purity & Self-control",
+    "Detachment & Simplicity",
+    "Equanimity",
+    "Faith & Courage"
+  ],
+  "family": {
+    "parents": "Supportive, value-driven; kindness and wisdom as core pillars",
+    "brother": "Energetic, team-oriented influence",
+    "maternal_grandmother": "Calm, devotional presence; stories and simplicity"
+  },
+  "lifestyle_marriage": {
+  "diet": "Eggetarian; consumes dairy; prefers boiled eggs and paneer; controlled carbs",
+  "beverages": "Green tea only",
+  "fitness": ["Running", "Weight training", "Disciplined routine"],
+  "location_base": "Hyderabad",
+  "open_to_relocate": ["Pune", "Gurgaon"],
+  "marital_status": "Bachelor",
+  "personality": ["Calm", "Analytical", "Respectful", "Clear communication"],
+  "marriage_intent": "Long-term partnership based on shared values, intellectual compatibility, emotional respect, and a peaceful disciplined lifestyle"
+},
+  "blog_themes": [
+    "Data thinking & philosophy",
+    "Reliability engineering",
+    "Decision psychology",
+    "Product management insights",
+    "Rational spirituality"
+  ],
+  "future_goals": [
+    "Leadership in Industrial IoT & Product",
+    "Deepen analytics/ML & reliability expertise",
+    "Publish 'Cost of Thought' book",
+    "Balance engineering, spirituality, health, and family",
+    "Build a peaceful, values-aligned married life",
+    "Create purposeful tech products"
+  ],
+  "chatbot_rules": {
+    "name": "Mr. X",
+    "tone": "Professional and polite",
+    "style": [
+      "Concise, respectful responses",
+      "No emojis or jokes unless requested",
+      "If unknown, say: 'I do not have that information, but I can assist with something else.'",
+      "Prioritize Saurav’s provided knowledge over assumptions"
+    ]
+  },
+  "metadata": {
+    "source": "curated_profile",
+    "updated_at": "2025-11-01"
+  }
+}
