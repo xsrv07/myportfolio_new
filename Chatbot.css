@@ -155,3 +155,35 @@
     height: 70%;
   }
 }
+.chatbot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatbot-actions {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.icon-btn {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 6px;
+  color: inherit;
+  opacity: 0.9;
+}
+.icon-btn:hover { opacity: 1; }
+
+#chatbot-mic.listening i { 
+  /* indicate recording */
+  animation: pulse 1.4s infinite;
+}
+
+#chatbot-clear
+{
+  margin-right: 16px;
+}
