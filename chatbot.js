@@ -1,6 +1,18 @@
-document.addEventListener("DOMContentLoaded", () => {
+// chatbot.js — Pure AI (Cloudflare Worker backend)
 
-  // =================== UI ELEMENTS ===================
+// create a stable per-browser session id and store it
+function getSessionId() {
+  const key = "mr_x_session_id";
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = "sess_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem(key, id);
+  }
+  return id;
+}
+const SESSION_ID = getSessionId();
+
+document.addEventListener("DOMContentLoaded", () => {
   const bubble = document.getElementById("chatbot-launcher");
   const windowBox = document.getElementById("chatbot-window");
   const closeBtn = document.getElementById("chatbot-close");
@@ -8,27 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputBox = document.getElementById("chatbot-input");
   const sendBtn = document.getElementById("chatbot-send");
   const typingIndicator = document.getElementById("chatbot-typing");
-  const clearBtn = document.getElementById("chatbot-clear");
-  const micBtn = document.getElementById("chatbot-mic");
-  const voiceToggleBtn = document.getElementById("chatbot-voice-toggle");
 
-  // =================== BACKEND URL ===================
-  const FUNCTION_URL = "https://YOUR-CLOUDFLARE-WORKER-URL/chatbot";
+  // 🔗 Replace with your Worker URL 
+  const FUNCTION_URL = "https://tiny-firefly-a524.ysmrsink.workers.dev/chatbot";
 
-  // =================== SESSION ID (per user) ===================
-  function getSessionId() {
-    const key = "mr_x_session_id";
-    let id = localStorage.getItem(key);
-    if (!id) {
-      id = "sess_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
-      localStorage.setItem(key, id);
-    }
-    return id;
-  }
-  const SESSION_ID = getSessionId();
-
-  // =================== BASIC CHAT UI ===================
   let greeted = false;
+  let sending = false;
 
   function addMessage(text, sender = "bot") {
     const div = document.createElement("div");
@@ -38,167 +35,181 @@ document.addEventListener("DOMContentLoaded", () => {
     msgBox.scrollTop = msgBox.scrollHeight;
   }
 
-  // Toggle open
-  bubble?.addEventListener("click", () => {
-    windowBox.classList.toggle("chatbot-hidden");
-    if (!greeted) {
-      setTimeout(() =>
-        addMessage("Hello, I’m Mr. X. How may I assist you today?"), 300);
-      greeted = true;
-    }
-  });
-
-  // Close button
-  closeBtn?.addEventListener("click", () => {
-    windowBox.classList.add("chatbot-hidden");
-  });
-
-  // =================== SEND MESSAGE ===================
-  function sendUserMessage() {
-    const text = inputBox.value.trim();
-    if (!text) return;
-    addMessage(text, "user");
-    inputBox.value = "";
-    callBackend(text);
+  function setTyping(isOn) {
+    typingIndicator.style.display = isOn ? "block" : "none";
   }
 
-  sendBtn?.addEventListener("click", sendUserMessage);
+  function setInputEnabled(enabled) {
+    inputBox.disabled = !enabled;
+    sendBtn.disabled = !enabled;
+  }
 
-  inputBox?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendUserMessage();
-    }
-  });
+  // Open/close
+  if (bubble && windowBox) {
+    bubble.addEventListener("click", () => {
+      windowBox.classList.toggle("chatbot-hidden");
+      if (!greeted) {
+        setTimeout(() => addMessage("Hello, I’m Mr. X. How may I assist you today?"), 400);
+        greeted = true;
+      }
+      inputBox?.focus();
+    });
+  }
 
-  // =================== CALL BACKEND ===================
+  if (closeBtn && windowBox) {
+    closeBtn.setAttribute("type", "button");
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      windowBox.classList.add("chatbot-hidden");
+    });
+  }
+
+  // Send handlers
+  if (sendBtn && inputBox) {
+    const sendUserMessage = () => {
+      const text = inputBox.value.trim();
+      if (!text || sending) return;
+      addMessage(text, "user");
+      inputBox.value = "";
+      callBackend(text);
+    };
+
+    sendBtn.addEventListener("click", sendUserMessage);
+    inputBox.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendUserMessage();
+      }
+    });
+  }
+
+  // 🔥 Pure AI: everything goes to backend
   async function callBackend(userMsg) {
-    typingIndicator.style.display = "block";
+    sending = true;
+    setTyping(true);
+    setInputEnabled(false);
+
     try {
       const res = await fetch(FUNCTION_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMsg, sessionId: SESSION_ID })
       });
-      const data = await res.json();
-      typingIndicator.style.display = "none";
-      addMessage(data.reply);
-      if (voiceEnabled) safeSpeak(data.reply);
+
+      // Network OK but backend error?
+      if (!res.ok) {
+        const detail = await res.text().catch(() => "");
+        addMessage("Sorry, there was a problem on the server. Please try again.");
+        console.error("Backend HTTP error:", res.status, detail);
+      } else {
+        const data = await res.json();
+        addMessage(data.reply || "Sorry, I couldn’t generate a response.");
+        try { speak(data.reply); } catch {}
+      }
     } catch (err) {
-      typingIndicator.style.display = "none";
-      addMessage("Sorry, there was a problem. Please try again later.");
+      console.error("Fetch error:", err);
+      addMessage("Sorry, there was a problem connecting to the server.");
+    } finally {
+      setTyping(false);
+      setInputEnabled(true);
+      sending = false;
+      inputBox?.focus();
     }
   }
-
-  // =================== CLEAR CHAT ===================
-  async function clearChatOnServer() {
-    try {
-      await fetch(FUNCTION_URL.replace("/chatbot", "/clear"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId: SESSION_ID })
-      });
-    } catch (e) {}
+  // ---- Clear Chat (UI + server) ----
+async function clearChatOnServer() {
+  try {
+    // Call your Worker /clear endpoint (added below in Worker patch)
+    await fetch(FUNCTION_URL.replace("/chatbot", "/clear"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId: SESSION_ID })
+    });
+  } catch (e) {
+    console.warn("Clear server history failed (will still clear UI).", e);
   }
+}
 
-  clearBtn?.addEventListener("click", async () => {
-    await clearChatOnServer();
-    msgBox.innerHTML = "";
-    addMessage("Chat cleared.", "bot");
-    greeted = false;
-  });
+function clearChatUI() {
+  msgBox.innerHTML = "";
+  // optional: reset greeting so bot greets again next open
+  greeted = false;
+}
 
-  // =================== TEXT TO SPEECH (VOICE OUTPUT) ===================
-  let voiceEnabled = false;
-
-  function updateVoiceIcon() {
-    if (!voiceToggleBtn) return;
-    voiceToggleBtn.innerHTML = voiceEnabled
-      ? `<i class="bi bi-volume-up"></i>`
-      : `<i class="bi bi-volume-mute"></i>`;
-    voiceToggleBtn.title = voiceEnabled ? "Voice ON" : "Voice OFF";
-  }
-
-  function safeSpeak(text) {
-    if (!window.speechSynthesis) return;
-    speechSynthesis.cancel();
+document.getElementById("chatbot-clear")?.addEventListener("click", async () => {
+  // Visual confirmation could be added here
+  await clearChatOnServer();
+  clearChatUI();
+  addMessage("Chat cleared.", "bot");
+});
+// ---- Voice: TTS (speak text) ----
+function speak(text) {
+  try {
+    if (!window.speechSynthesis) return alert("Speech not supported in this browser.");
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "en-IN";
-    utter.rate = 1;
+    utter.rate = 1;        // tweak if needed
+    utter.pitch = 1;
+    utter.lang = "en-IN";  // or "en-US"
+    speechSynthesis.cancel(); // stop previous
     speechSynthesis.speak(utter);
+  } catch (e) {
+    console.warn("TTS error", e);
   }
+}
 
-  voiceToggleBtn?.addEventListener("click", () => {
-    voiceEnabled = !voiceEnabled;
-    if (!voiceEnabled && window.speechSynthesis) speechSynthesis.cancel();
-    updateVoiceIcon();
-  });
+// Speak last bot message
+document.getElementById("chatbot-speak")?.addEventListener("click", () => {
+  const bots = [...msgBox.querySelectorAll(".bot-msg")];
+  if (bots.length === 0) return;
+  const last = bots[bots.length - 1].innerText;
+  speak(last);
+});
 
-  updateVoiceIcon();
+// ---- Voice: STT (mic → textarea) ----
+let rec = null;
+let listening = false;
 
-  // =================== VOICE INPUT (MIC) ===================
-  let rec = null;
-  let listening = false;
+function getRecognizer() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.lang = "en-IN";     // tweak language
+  r.interimResults = false;
+  r.maxAlternatives = 1;
+  return r;
+}
 
-  function speechSupported() {
-    return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
-  }
-
-  function createRecognizer() {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) return null;
-    const r = new SR();
-    r.lang = "en-IN";
-    r.interimResults = false;
-    r.maxAlternatives = 1;
-    return r;
-  }
-
-  async function ensureMicPermission() {
-    if (!navigator.mediaDevices?.getUserMedia) return true;
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach(t => t.stop());
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  micBtn?.addEventListener("click", async () => {
-    if (location.protocol !== "https:" && location.hostname !== "localhost") {
-      alert("Voice input needs HTTPS.");
-      return;
-    }
-    if (!speechSupported()) {
-      alert("Voice input not supported in this browser. Use Chrome.");
-      return;
-    }
+const micBtn = document.getElementById("chatbot-mic");
+if (micBtn) {
+  micBtn.addEventListener("click", () => {
     if (listening) {
       rec?.stop();
       return;
     }
-
-    const ok = await ensureMicPermission();
-    if (!ok) {
-      alert("Microphone permission denied.");
-      return;
-    }
-
-    rec = createRecognizer();
+    rec = getRecognizer();
+    if (!rec) return alert("Voice input not supported on this browser.");
     listening = true;
     micBtn.classList.add("listening");
 
     rec.onresult = (e) => {
       const transcript = e.results[0][0].transcript;
       inputBox.value = transcript;
-      sendUserMessage();
+      // auto-send after dictation (optional)
+      if (transcript && transcript.trim()) {
+        // simulate Send
+        document.getElementById("chatbot-send")?.click();
+      }
+    };
+    rec.onerror = () => {
+      listening = false;
+      micBtn.classList.remove("listening");
     };
     rec.onend = () => {
       listening = false;
       micBtn.classList.remove("listening");
     };
+
     rec.start();
   });
-
+}
 });
