@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 🔥 Pure AI: everything goes to backend
+  // AI: everything goes to backend
   async function callBackend(userMsg) {
     sending = true;
     setTyping(true);
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const VOICE_STATE_KEY = "mr_x_voice_enabled";
   // default muted if no saved state
-  let voiceEnabled = localStorage.getItem(VOICE_STATE_KEY) === "true" ? true : false;
+  let voiceEnabled = localStorage.getItem(VOICE_STATE_KEY) === "false" ? true : false;
 
   function updateVoiceIcon() {
     if (!voiceToggleBtn) return;
@@ -235,4 +235,5 @@ if (micBtn) {
     rec.start();
   });
 }
+
 });
