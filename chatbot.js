@@ -1,6 +1,6 @@
-// chatbot.js — Pure AI (Cloudflare Worker backend) + Clear Chat + Mic + Mute/Unmute (default MUTED + remembered)
+// chatbot.js — Pure AI (Cloudflare Worker backend)
 
-/* ===== Session ID (per browser) ===== */
+// create a stable per-browser session id and store it
 function getSessionId() {
   const key = "mr_x_session_id";
   let id = localStorage.getItem(key);
@@ -13,7 +13,6 @@ function getSessionId() {
 const SESSION_ID = getSessionId();
 
 document.addEventListener("DOMContentLoaded", () => {
-  /* ===== Grab elements ===== */
   const bubble = document.getElementById("chatbot-launcher");
   const windowBox = document.getElementById("chatbot-window");
   const closeBtn = document.getElementById("chatbot-close");
@@ -21,18 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputBox = document.getElementById("chatbot-input");
   const sendBtn = document.getElementById("chatbot-send");
   const typingIndicator = document.getElementById("chatbot-typing");
+    const voiceToggleBtn = document.getElementById("chatbot-voice-toggle");
 
-  const clearBtn = document.getElementById("chatbot-clear");
-  const micBtn = document.getElementById("chatbot-mic");
-  const voiceToggleBtn = document.getElementById("chatbot-voice-toggle");
-
-  /* ===== Backend URL ===== */
-  const FUNCTION_URL = "https://tiny-firefly-a524.ysmrsink.workers.dev/chatbot"; // <-- keep /chatbot
+  // 🔗 Replace with your Worker URL 
+  const FUNCTION_URL = "https://tiny-firefly-a524.ysmrsink.workers.dev/chatbot";
 
   let greeted = false;
   let sending = false;
 
-  /* ===== Messages UI helpers ===== */
   function addMessage(text, sender = "bot") {
     const div = document.createElement("div");
     div.classList.add(sender === "bot" ? "bot-msg" : "user-msg");
@@ -40,116 +35,56 @@ document.addEventListener("DOMContentLoaded", () => {
     msgBox.appendChild(div);
     msgBox.scrollTop = msgBox.scrollHeight;
   }
+
   function setTyping(isOn) {
     typingIndicator.style.display = isOn ? "block" : "none";
   }
+
   function setInputEnabled(enabled) {
     inputBox.disabled = !enabled;
     sendBtn.disabled = !enabled;
   }
 
-  /* ===== Open/Close ===== */
-  bubble?.addEventListener("click", () => {
-    windowBox.classList.toggle("chatbot-hidden");
-    if (!greeted) {
-      setTimeout(() => addMessage("Hello, I’m Mr. X. How may I assist you today?"), 400);
-      greeted = true;
-    }
-    inputBox?.focus();
-  });
-  closeBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    windowBox.classList.add("chatbot-hidden");
-  });
-
-  /* ===== Send handling ===== */
-  function sendUserMessage() {
-    const text = inputBox.value.trim();
-    if (!text || sending) return;
-    addMessage(text, "user");
-    inputBox.value = "";
-    callBackend(text);
-  }
-  sendBtn?.addEventListener("click", sendUserMessage);
-  inputBox?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendUserMessage();
-    }
-  });
-
-  /* ===== Voice Output: TTS (default MUTED + remembered) ===== */
-  const VOICE_STATE_KEY = "mr_x_voice_enabled";
-  // default = muted, unless user enabled earlier
-  let voiceEnabled = localStorage.getItem(VOICE_STATE_KEY) === "true";  // <-- FIXED
-
-  // Warm-up speech engine after first user interaction (avoids autoplay blocks)
-  document.addEventListener("click", () => {
-    if (window.speechSynthesis) speechSynthesis.cancel();
-  }, { once: true });
-
-  function updateVoiceIcon() {
-    if (!voiceToggleBtn) return;
-    voiceToggleBtn.innerHTML = voiceEnabled
-      ? `<i class="bi bi-volume-up"></i>`
-      : `<i class="bi bi-volume-mute"></i>`;
-    voiceToggleBtn.title = voiceEnabled ? "Voice ON" : "Voice OFF (Muted)";
-  }
-
-  // Speak helper that waits for voices to be ready
-  function safeSpeak(text) {
-    if (!voiceEnabled || !window.speechSynthesis || !text) return;
-
-    const synth = window.speechSynthesis;
-
-    const speakNow = () => {
-      try {
-        synth.cancel(); // stop any previous utterance
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = "en-IN";  // change to "en-US" if you prefer
-        utter.rate = 1;
-
-        // pick a voice if available (prefer en-IN/en-GB/en-US)
-        const voices = synth.getVoices();
-        if (voices && voices.length) {
-          const preferred = voices.find(v => /en-IN|en-GB|en-US/i.test(v.lang)) || voices[0];
-          if (preferred) utter.voice = preferred;
-        }
-
-        synth.speak(utter);
-      } catch (e) {
-        console.warn("TTS error:", e);
+  // Open/close
+  if (bubble && windowBox) {
+    bubble.addEventListener("click", () => {
+      windowBox.classList.toggle("chatbot-hidden");
+      if (!greeted) {
+        setTimeout(() => addMessage("Hello, I’m Mr. X. How may I assist you today?"), 400);
+        greeted = true;
       }
+      inputBox?.focus();
+    });
+  }
+
+  if (closeBtn && windowBox) {
+    closeBtn.setAttribute("type", "button");
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      windowBox.classList.add("chatbot-hidden");
+    });
+  }
+
+  // Send handlers
+  if (sendBtn && inputBox) {
+    const sendUserMessage = () => {
+      const text = inputBox.value.trim();
+      if (!text || sending) return;
+      addMessage(text, "user");
+      inputBox.value = "";
+      callBackend(text);
     };
 
-    // If voices aren’t loaded yet, wait for the event once
-    if (!synth.getVoices().length) {
-      const once = () => {
-        synth.removeEventListener("voiceschanged", once);
-        speakNow();
-      };
-      synth.addEventListener("voiceschanged", once, { once: true });
-      // Trigger voices population in some browsers
-      synth.getVoices();
-      // Fallback in case event never fires
-      setTimeout(speakNow, 600);
-    } else {
-      speakNow();
-    }
+    sendBtn.addEventListener("click", sendUserMessage);
+    inputBox.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendUserMessage();
+      }
+    });
   }
 
-  voiceToggleBtn?.addEventListener("click", () => {
-    voiceEnabled = !voiceEnabled;
-    localStorage.setItem(VOICE_STATE_KEY, String(voiceEnabled));
-    if (!voiceEnabled && window.speechSynthesis) {
-      speechSynthesis.cancel(); // stop immediately when muting
-    }
-    updateVoiceIcon();
-  });
-
-  updateVoiceIcon();
-
-  /* ===== Backend call ===== */
+  // 🔥 Pure AI: everything goes to backend
   async function callBackend(userMsg) {
     sending = true;
     setTyping(true);
@@ -162,15 +97,15 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ message: userMsg, sessionId: SESSION_ID })
       });
 
+      // Network OK but backend error?
       if (!res.ok) {
         const detail = await res.text().catch(() => "");
         addMessage("Sorry, there was a problem on the server. Please try again.");
         console.error("Backend HTTP error:", res.status, detail);
       } else {
         const data = await res.json();
-        const reply = data.reply || "Sorry, I couldn’t generate a response.";
-        addMessage(reply);
-        safeSpeak(reply); // speak only if voiceEnabled
+        addMessage(data.reply || "Sorry, I couldn’t generate a response.");
+        try { speak(data.reply); } catch {}
       }
     } catch (err) {
       console.error("Fetch error:", err);
@@ -183,56 +118,108 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ===== Clear Chat (UI + server) ===== */
-  async function clearChatOnServer() {
-    try {
-      await fetch(FUNCTION_URL.replace("/chatbot", "/clear"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId: SESSION_ID })
-      });
-    } catch (e) {
-      console.warn("Clear server history failed (will still clear UI).", e);
-    }
-  }
-  function clearChatUI() {
-    msgBox.innerHTML = "";
-    greeted = false;
-  }
-  document.getElementById("chatbot-clear")?.addEventListener("click", async () => {
-    await clearChatOnServer();
-    clearChatUI();
-    addMessage("Chat cleared.", "bot");
-  });
+  const VOICE_STATE_KEY = "mr_x_voice_enabled";
+  // default muted if no saved state
+  let voiceEnabled = localStorage.getItem(VOICE_STATE_KEY) === "true" ? true : false;
 
-  /* ===== Voice Input (Mic → textarea) — optional ===== */
-  let rec = null;
-  let listening = false;
-  function getRecognizer() {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) return null;
-    const r = new SR();
-    r.lang = "en-IN";
-    r.interimResults = false;
-    r.maxAlternatives = 1;
-    return r;
+  function updateVoiceIcon() {
+    if (!voiceToggleBtn) return;
+    voiceToggleBtn.innerHTML = voiceEnabled
+      ? `<i class="bi bi-volume-up"></i>`
+      : `<i class="bi bi-volume-mute"></i>`;
+    voiceToggleBtn.title = voiceEnabled ? "Voice ON" : "Voice OFF (Muted)";
   }
-  micBtn?.addEventListener("click", () => {
-    if (location.protocol !== "https:" && location.hostname !== "localhost") {
-      alert("Voice input needs HTTPS.");
+
+  voiceToggleBtn?.addEventListener("click", () => {
+    voiceEnabled = !voiceEnabled;
+    localStorage.setItem(VOICE_STATE_KEY, String(voiceEnabled));
+    if (!voiceEnabled && window.speechSynthesis) speechSynthesis.cancel();
+    updateVoiceIcon();
+  });
+  updateVoiceIcon();
+  // ---- Clear Chat (UI + server) ----
+async function clearChatOnServer() {
+  try {
+    // Call your Worker /clear endpoint (added below in Worker patch)
+    await fetch(FUNCTION_URL.replace("/chatbot", "/clear"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId: SESSION_ID })
+    });
+  } catch (e) {
+    console.warn("Clear server history failed (will still clear UI).", e);
+  }
+}
+
+function clearChatUI() {
+  msgBox.innerHTML = "";
+  // optional: reset greeting so bot greets again next open
+  greeted = false;
+}
+
+document.getElementById("chatbot-clear")?.addEventListener("click", async () => {
+  // Visual confirmation could be added here
+  await clearChatOnServer();
+  clearChatUI();
+  addMessage("Chat cleared.", "bot");
+});
+// ---- Voice: TTS (speak text) ----
+function speak(text) {
+  if(voiceToggleBtn.innerHTML.includes("bi bi-volume-up")){
+  try {
+    if (!window.speechSynthesis) return alert("Speech not supported in this browser.");
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 1;        // tweak if needed
+    utter.pitch = 1;
+    utter.lang = "en-IN";  // or "en-US"
+    speechSynthesis.cancel(); // stop previous
+    speechSynthesis.speak(utter);
+  } catch (e) {
+    console.warn("TTS error", e);
+  }
+}
+}
+
+// Speak last bot message
+document.getElementById("chatbot-voice-toggle")?.addEventListener("click", () => {
+  const bots = [...msgBox.querySelectorAll(".bot-msg")];
+  if (bots.length === 0) return;
+  const last = bots[bots.length - 1].innerText;
+  speak(last);
+});
+
+// ---- Voice: STT (mic → textarea) ----
+let rec = null;
+let listening = false;
+
+function getRecognizer() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.lang = "en-IN";     // tweak language
+  r.interimResults = false;
+  r.maxAlternatives = 1;
+  return r;
+}
+
+const micBtn = document.getElementById("chatbot-mic");
+if (micBtn) {
+  micBtn.addEventListener("click", () => {
+    if (listening) {
+      rec?.stop();
       return;
     }
-    if (listening) { rec?.stop(); return; }
     rec = getRecognizer();
-    if (!rec) return alert("Voice input not supported in this browser.");
-
+    if (!rec) return alert("Voice input not supported on this browser.");
     listening = true;
     micBtn.classList.add("listening");
 
     rec.onresult = (e) => {
       const transcript = e.results[0][0].transcript;
       inputBox.value = transcript;
+      // auto-send after dictation (optional)
       if (transcript && transcript.trim()) {
+        // simulate Send
         document.getElementById("chatbot-send")?.click();
       }
     };
@@ -244,7 +231,8 @@ document.addEventListener("DOMContentLoaded", () => {
       listening = false;
       micBtn.classList.remove("listening");
     };
+
     rec.start();
   });
-
+}
 });
